@@ -2,7 +2,7 @@
 ### Importing necessary libraries
 
 
-```
+```python
 import pandas as pd #allows importing data from various file formats such as comma-separated values, JSON, SQL, Microsoft Excel.
 import matplotlib.pyplot as plt #To plot the data
 ```
@@ -10,14 +10,14 @@ import matplotlib.pyplot as plt #To plot the data
 ### Reading BankChurners.csv file as bank_churners from the Data folder
 
 
-```
-bank_churners= pd.read_csv('Data/BankChurners.csv')
+```python
+bank_churners= pd.read_csv('../Data/BankChurners.csv')
 ```
 
 ### Printing out first five rows from the file that we readed above
 
 
-```
+```python
 bank_churners.head(5)
 ```
 
@@ -159,7 +159,7 @@ bank_churners.head(5)
 ### The datasheet contains 2000 rows and 15 columns
 
 
-```
+```python
 bank_churners.shape
 ```
 
@@ -170,8 +170,10 @@ bank_churners.shape
 
 
 
+### Columns of the datasheet
 
-```
+
+```python
 bank_churners.columns
 ```
 
@@ -187,10 +189,12 @@ bank_churners.columns
 
 
 
+### Creating Methods in Object (details_of_each_column) for the columns.
 
-```
-print("There are total",bank_churners['Attrition_Flag'].nunique(),"attrition flag of customers.","\n")
-print(bank_churners.Attrition_Flag.value_counts(),"\n")
+
+```python
+print("There are total",bank_churners['Attrition_Flag'].nunique(),"attrition flag of customers.","\n") # using nunique() funtion to return number of unique elements
+print(bank_churners.Attrition_Flag.value_counts(),"\n") # using value_counts() function to get a Series containing counts of unique values
 ```
 
     There are total 2 attrition flag of customers. 
@@ -202,23 +206,34 @@ print(bank_churners.Attrition_Flag.value_counts(),"\n")
     
 
 
-```
-print("There are total",bank_churners['Card_Category'].nunique(),"types of card.","\n")
-print(bank_churners.Card_Category.value_counts(),"\n")
+```python
+print(bank_churners.Credit_Limit.describe(),"\n") # using describe function, finding min and max value, and creating range
+print("There are",(bank_churners.Credit_Limit < 10000.00).value_counts()[1], "clients with less than 10,000 credit limit.")
+print("There are",((bank_churners.Credit_Limit > 10000.00) & (bank_churners.Credit_Limit < 20000.00)).value_counts()[1], "clients within (10,000 - 20,000) credit limit.")
+print("There are",((bank_churners.Credit_Limit > 20000.00) & (bank_churners.Credit_Limit < 30000.00)).value_counts()[1], "clients within (20,000 - 30,000) credit limit.")
+print("There are",(bank_churners.Credit_Limit > 30000.00).value_counts()[1], "clients with more than 30,000 credit limit.")
 ```
 
-    There are total 4 types of card. 
+    count     2000.000000
+    mean      9149.488950
+    std       8871.524952
+    min       1438.300000
+    25%       2923.500000
+    50%       5454.000000
+    75%      12160.000000
+    max      34516.000000
+    Name: Credit_Limit, dtype: float64 
     
-    Blue        1910
-    Silver        75
-    Gold          13
-    Platinum       2
-    Name: Card_Category, dtype: int64 
-    
+    There are 1393 clients with less than 10,000 credit limit.
+    There are 349 clients within (10,000 - 20,000) credit limit.
+    There are 137 clients within (20,000 - 30,000) credit limit.
+    There are 121 clients with more than 30,000 credit limit.
     
 
+###### Repeating the same steps above for the columns and  created methods in object.
 
-```
+
+```python
 class details_of_each_column: # except column CLIENT_NUM
     
     def Attrition_Flag():
@@ -301,24 +316,39 @@ class details_of_each_column: # except column CLIENT_NUM
 ```
 
 
-```
-details_of_each_column.Gender()
+```python
+details_of_each_column.Total_Trans_Amt()
 ```
 
-    There are total 2 genders. 
+    count    2000.000000
+    mean     1698.576000
+    std       592.275515
+    min       510.000000
+    25%      1309.000000
+    50%      1585.000000
+    75%      1959.250000
+    max      4686.000000
+    Name: Total_Trans_Amt, dtype: float64 
     
-    M    1216
-    F     784
-    Name: Gender, dtype: int64 
-    
+    There are 144 clients with less than 1,000 total trans amount.
+    There are 700 clients within (1,000 - 1,500) total trans amount.
+    There are 685 clients within (1,500 - 2,000) total trans amount.
+    There are 272 clients within (2,000 - 2,500) total trans amount.
+    There are 127 clients within (2,500 - 3,000) total trans amount.
+    There are 45 clients within (3,000 - 3,500) total trans amount.
+    There are 17 clients within (3,500 - 4,000) total trans amount.
+    There are 5 clients within (4,000 - 4,500) total trans amount.
+    There are 3 clients with more than 4,500 total trans amount.
     
 
+### Creating Methods in Object (visualization) for the columns 'Income_Category' and ''Months_Inactive_12_months''
 
-```
+
+```python
 print("There are total",bank_churners['Income_Category'].nunique(),"categories of income.","\n")
 print(bank_churners.Income_Category.value_counts(),"\n")
-print(bank_churners.Income_Category.value_counts().index.tolist(),"\n")
-print(bank_churners.Income_Category.value_counts().tolist(),"\n")
+print(bank_churners.Income_Category.value_counts().index.tolist(),"\n") # taking out the index and making into list
+print(bank_churners.Income_Category.value_counts().tolist(),"\n") #taking the value of index and making into list
 ```
 
     There are total 6 categories of income. 
@@ -338,57 +368,59 @@ print(bank_churners.Income_Category.value_counts().tolist(),"\n")
     
 
 
-```
+```python
 class visualization:
     def show_pie_chart():
         income_category_list = bank_churners['Income_Category'].value_counts().tolist()
         label_income_category = bank_churners.Income_Category.value_counts().index.tolist()
-        exp = [0.2,0,0,0,0,0]
+        exp = [0.2,0,0,0,0,0] # to take out a piece of pie
         plt.pie(income_category_list, labels = label_income_category, explode = exp , autopct = '%2.1f%%')
-        plt.title("Income Category of Clients")
-        plt.rcParams['font.size'] = 12.0
-        plt.gcf().set_size_inches(6,6) 
+        plt.title("Income Category of Clients") # labelling tittle
+        plt.rcParams['font.size'] = 12.0 #setting font size
+        plt.gcf().set_size_inches(6,6)  #setting figure size
         plt.show()
         
     def show_bar_graph():
-        plt.style.use('dark_background')
-        plt.title("Clients Inactive For 12 Months")
-        plt.xlabel('12 Months Inactive')
-        plt.ylabel('Number of Clients')
-        bank_churners['Months_Inactive_12_months'].value_counts(sort= False).plot(kind='bar',edgecolor = 'yellow')
+        plt.style.use('dark_background') #changing the background to dark
+        plt.title("Clients Inactive For 12 Months") #label the tittle
+        plt.xlabel('12 Months Inactive') #label x-axis
+        plt.ylabel('Number of Clients')  #label y-axis
+        bank_churners['Months_Inactive_12_months'].value_counts(sort= False).plot(kind='bar',edgecolor = 'yellow') #plotting bar graph
 ```
 
 
-```
+```python
 visualization.show_pie_chart()
 ```
 
 
     
-![png](BankChurners_files/BankChurners_15_0.png)
+![png](BankChurners_files/BankChurners_19_0.png)
     
 
 
 
-```
+```python
 visualization.show_bar_graph()
 ```
 
 
     
-![png](BankChurners_files/BankChurners_16_0.png)
+![png](BankChurners_files/BankChurners_20_0.png)
     
 
 
+### Creating Methods in Object (tracer) for the column 'CLIENT_NUM'
 
-```
+
+```python
 class tracer:
-    def trace_client_background(): # tested code with characters,symbols,numbers
-        while True:
-            try:
+    def trace_client_background(): 
+        while True: #using while loop to repeat
+            try: #using try except block to overcome ValueError if the user input other than integer
                 client_num = (int(input('Input a client number : ')))
                 
-                if client_num not in bank_churners.CLIENT_NUM.values:
+                if client_num not in bank_churners.CLIENT_NUM.values: #using if statement if the number entered not in the column to print out
                     print("No record found for the number : ",client_num,"\n\n")
                                                                                 
                 else:
@@ -399,230 +431,44 @@ class tracer:
 ```
 
 
-```
+```python
 tracer.trace_client_background()
 # testing output with strings, integers
 #565676899
 #843537503
-#714804483
 #abcd
 #)_(+)
 ```
 
-    Input a client number : hgh
+    Input a client number : dsfsdf
     Please enter a valid client number...*OnlY IntEgerS*
     
     
+    Input a client number : ^&*(_
+    Please enter a valid client number...*OnlY IntEgerS*
     
-
-
-    ---------------------------------------------------------------------------
-
-    KeyboardInterrupt                         Traceback (most recent call last)
-
-    <ipython-input-40-8acc6eede617> in <module>
-    ----> 1 tracer.trace_client_background()
-          2 # testing output with strings, integers
-          3 #565676899
-          4 #843537503
-          5 #714804483
     
-
-    <ipython-input-39-aa1bc16ca75a> in trace_client_background()
-          3         while True:
-          4             try:
-    ----> 5                 client_num = (int(input('Input a client number : ')))
-          6 
-          7                 if client_num not in bank_churners.CLIENT_NUM.values:
+    Input a client number : 565676899
+    No record found for the number :  565676899 
     
-
-    ~\anaconda3\lib\site-packages\ipykernel\kernelbase.py in raw_input(self, prompt)
-        858                 "raw_input was called, but this frontend does not support input requests."
-        859             )
-    --> 860         return self._input_request(str(prompt),
-        861             self._parent_ident,
-        862             self._parent_header,
     
-
-    ~\anaconda3\lib\site-packages\ipykernel\kernelbase.py in _input_request(self, prompt, ident, parent, password)
-        902             except KeyboardInterrupt:
-        903                 # re-raise KeyboardInterrupt, to truncate traceback
-    --> 904                 raise KeyboardInterrupt("Interrupted by user") from None
-        905             except Exception as e:
-        906                 self.log.warning("Invalid Message:", exc_info=True)
+    Input a client number : 843537503
+          CLIENT_NUM     Attrition_Flag  Customer_Age Gender  Dependent_count  \
+    1999   843537503  Existing Customer            55      M                3   
     
-
-    KeyboardInterrupt: Interrupted by user
-
-
-
-```
-!jupyter nbconvert --to markdown LinerR.ipynb
-```
-
-    This application is used to convert notebook files (*.ipynb) to various other
-    formats.
+         Education_Level Marital_Status Income_Category Card_Category  \
+    1999        Graduate        Married    $80K - $120K          Blue   
     
-    WARNING: THE COMMANDLINE INTERFACE MAY CHANGE IN FUTURE RELEASES.
+          Months_on_book  Total_Relationship_Count  Months_Inactive_12_months  \
+    1999              48                         5                          2   
     
-    Options
-    =======
-    The options below are convenience aliases to configurable class-options,
-    as listed in the "Equivalent to" description-line of the aliases.
-    To see all configurable class-options for some <cmd>, use:
-        <cmd> --help-all
+          Credit_Limit  Total_Revolving_Bal  Total_Trans_Amt  
+    1999       16208.0                 1278             1842   
     
-    --debug
-        set log level to logging.DEBUG (maximize logging output)
-        Equivalent to: [--Application.log_level=10]
-    --generate-config
-        generate default config file
-        Equivalent to: [--JupyterApp.generate_config=True]
-    -y
-        Answer yes to any questions instead of prompting.
-        Equivalent to: [--JupyterApp.answer_yes=True]
-    --execute
-        Execute the notebook prior to export.
-        Equivalent to: [--ExecutePreprocessor.enabled=True]
-    --allow-errors
-        Continue notebook execution even if one of the cells throws an error and include the error message in the cell output (the default behaviour is to abort conversion). This flag is only relevant if '--execute' was specified, too.
-        Equivalent to: [--ExecutePreprocessor.allow_errors=True]
-    --stdin
-        read a single notebook file from stdin. Write the resulting notebook with default basename 'notebook.*'
-        Equivalent to: [--NbConvertApp.from_stdin=True]
-    --stdout
-        Write notebook output to stdout instead of files.
-        Equivalent to: [--NbConvertApp.writer_class=StdoutWriter]
-    --inplace
-        Run nbconvert in place, overwriting the existing notebook (only 
-        relevant when converting to notebook format)
-        Equivalent to: [--NbConvertApp.use_output_suffix=False --NbConvertApp.export_format=notebook --FilesWriter.build_directory=]
-    --clear-output
-        Clear output of current file and save in place, 
-        overwriting the existing notebook.
-        Equivalent to: [--NbConvertApp.use_output_suffix=False --NbConvertApp.export_format=notebook --FilesWriter.build_directory= --ClearOutputPreprocessor.enabled=True]
-    --no-prompt
-        Exclude input and output prompts from converted document.
-        Equivalent to: [--TemplateExporter.exclude_input_prompt=True --TemplateExporter.exclude_output_prompt=True]
-    --no-input
-        Exclude input cells and output prompts from converted document. 
-        This mode is ideal for generating code-free reports.
-        Equivalent to: [--TemplateExporter.exclude_output_prompt=True --TemplateExporter.exclude_input=True]
-    --allow-chromium-download
-        Whether to allow downloading chromium if no suitable version is found on the system.
-        Equivalent to: [--WebPDFExporter.allow_chromium_download=True]
-    --log-level=<Enum>
-        Set the log level by value or name.
-        Choices: any of [0, 10, 20, 30, 40, 50, 'DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL']
-        Default: 30
-        Equivalent to: [--Application.log_level]
-    --config=<Unicode>
-        Full path of a config file.
-        Default: ''
-        Equivalent to: [--JupyterApp.config_file]
-    --to=<Unicode>
-        The export format to be used, either one of the built-in formats
-        ['asciidoc', 'custom', 'html', 'latex', 'markdown', 'notebook', 'pdf',
-        'python', 'rst', 'script', 'slides', 'webpdf'] or a dotted object name that
-        represents the import path for an `Exporter` class
-        Default: ''
-        Equivalent to: [--NbConvertApp.export_format]
-    --template=<Unicode>
-        Name of the template to use
-        Default: ''
-        Equivalent to: [--TemplateExporter.template_name]
-    --template-file=<Unicode>
-        Name of the template file to use
-        Default: None
-        Equivalent to: [--TemplateExporter.template_file]
-    --writer=<DottedObjectName>
-        Writer class used to write the  results of the conversion
-        Default: 'FilesWriter'
-        Equivalent to: [--NbConvertApp.writer_class]
-    --post=<DottedOrNone>
-        PostProcessor class used to write the results of the conversion
-        Default: ''
-        Equivalent to: [--NbConvertApp.postprocessor_class]
-    --output=<Unicode>
-        overwrite base name use for output files. can only be used when converting
-        one notebook at a time.
-        Default: ''
-        Equivalent to: [--NbConvertApp.output_base]
-    --output-dir=<Unicode>
-        Directory to write output(s) to. Defaults to output to the directory of each
-        notebook. To recover previous default behaviour (outputting to the current
-        working directory) use . as the flag value.
-        Default: ''
-        Equivalent to: [--FilesWriter.build_directory]
-    --reveal-prefix=<Unicode>
-        The URL prefix for reveal.js (version 3.x). This defaults to the reveal CDN,
-        but can be any url pointing to a copy  of reveal.js.
-        For speaker notes to work, this must be a relative path to a local  copy of
-        reveal.js: e.g., "reveal.js".
-        If a relative path is given, it must be a subdirectory of the current
-        directory (from which the server is run).
-        See the usage documentation
-        (https://nbconvert.readthedocs.io/en/latest/usage.html#reveal-js-html-
-        slideshow) for more details.
-        Default: ''
-        Equivalent to: [--SlidesExporter.reveal_url_prefix]
-    --nbformat=<Enum>
-        The nbformat version to write. Use this to downgrade notebooks.
-        Choices: any of [1, 2, 3, 4]
-        Default: 4
-        Equivalent to: [--NotebookExporter.nbformat_version]
-    
-    Examples
-    --------
-    
-        The simplest way to use nbconvert is
-
-    [NbConvertApp] WARNING | pattern 'LinerR.ipynb' matched no files
-    
-
-    
-        
-        > jupyter nbconvert mynotebook.ipynb --to html
-        
-        Options include ['asciidoc', 'custom', 'html', 'latex', 'markdown', 'notebook', 'pdf', 'python', 'rst', 'script', 'slides', 'webpdf'].
-        
-        > jupyter nbconvert --to latex mynotebook.ipynb
-        
-        Both HTML and LaTeX support multiple output templates. LaTeX includes
-        'base', 'article' and 'report'.  HTML includes 'basic' and 'full'. You
-        can specify the flavor of the format used.
-        
-        > jupyter nbconvert --to html --template lab mynotebook.ipynb
-        
-        You can also pipe the output to stdout, rather than a file
-        
-        > jupyter nbconvert mynotebook.ipynb --stdout
-        
-        PDF is generated via latex
-        
-        > jupyter nbconvert mynotebook.ipynb --to pdf
-        
-        You can get (and serve) a Reveal.js-powered slideshow
-        
-        > jupyter nbconvert myslides.ipynb --to slides --post serve
-        
-        Multiple notebooks can be given at the command line in a couple of 
-        different ways:
-        
-        > jupyter nbconvert notebook*.ipynb
-        > jupyter nbconvert notebook1.ipynb notebook2.ipynb
-        
-        or you can specify the notebooks list in a config file, containing::
-        
-            c.NbConvertApp.notebooks = ["my_notebook.ipynb"]
-        
-        > jupyter nbconvert --config mycfg.py
-    
-    To see all available configurables, use `--help-all`.
     
     
 
 
-```
-
+```python
+!jupyter nbconvert --to markdown BankChurners.ipynb
 ```
